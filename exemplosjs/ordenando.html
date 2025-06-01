@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordenando Valores</title>
+    <script src="ordenando.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="number"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 8px;
+            margin: 4px 0;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ordenando Valores</h1>
+    
+    <div class="input-group">
+        <input type="number" id="valor" placeholder="Valor">
+        <button onclick="add()">Adicionar</button>
+    </div>
+    
+    <div class="input-group">
+        <select id="algoritmo">
+            <option value="bubble" selected>Bubble Sort</option>
+            <option value="selection">Selection Sort</option>
+            <option value="quick">Quick Sort</option>
+        </select>
+    </div>
+    
+    <div class="controls">
+        <button onclick="ordenar()">Ordenar</button>
+        <button onclick="misturar()">Misturar</button>
+    </div>
+    
+    <ul id="valores"></ul>
+
+    <script>
+        function add() {
+            // a) Capturar o campo de entrada
+            const input = document.getElementById('valor');
+            
+            // b) Capturar a lista
+            const lista = document.getElementById('valores');
+            
+            // c) Criar elemento li
+            const node = document.createElement('li');
+            
+            // d) Criar e adicionar nó de texto
+            const textNode = document.createTextNode(input.value);
+            node.appendChild(textNode);
+            
+            // e) Adicionar elemento à lista
+            lista.appendChild(node);
+            
+            // Limpar o campo de entrada
+            input.value = '';
+        }
+
+        function ordenar() {
+            // a) Capturar a lista de valores e a lista de seleção
+            const lista = document.getElementById('valores');
+            const algoritmoSelect = document.getElementById('algoritmo');
+            
+            // b) e c) Obter valores da lista e converter para inteiros
+            const valores = Array.from(lista.children).map(item => parseInt(item.innerHTML));
+            
+            // d) Escolher e aplicar o algoritmo de ordenação
+            switch(algoritmoSelect.value) {
+                case 'bubble':
+                    bubble_sort(valores);
+                    break;
+                case 'selection':
+                    selection_sort(valores);
+                    break;
+                case 'quick':
+                    quick_sort(valores, 0, valores.length - 1);
+                    break;
+            }
+            
+            // e) Gerar nova lista usando map e reduce
+            lista.innerHTML = valores
+                .map(valor => `<li>${valor}</li>`)
+                .reduce((acc, curr) => acc + curr, '');
+        }
+
+        function misturar() {
+            // a) Capturar a lista de valores
+            const lista = document.getElementById('valores');
+            
+            // b) e c) Obter valores da lista e converter para inteiros
+            const valores = Array.from(lista.children).map(item => parseInt(item.innerHTML));
+            
+            // d) Aplicar a função shuffle
+            shuffle(valores, valores.length * 2);
+            
+            // e) Gerar nova lista usando map e reduce
+            lista.innerHTML = valores
+                .map(valor => `<li>${valor}</li>`)
+                .reduce((acc, curr) => acc + curr, '');
+        }
+    </script>
+</body>
+</html>
